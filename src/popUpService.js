@@ -64,4 +64,3 @@ getGitHubProfileImage(username, token)
 const button = document.getElementById("popupBtn")
 
 // append the button to the body element
-document.body.appendChild(button)
