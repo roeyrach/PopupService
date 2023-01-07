@@ -9,15 +9,6 @@ function createFormService(formParentElement, onSubmit) {
 		else return false
 	}
 
-	function isNumber(arg) {
-		const num = parseInt(arg)
-		if (typeof num === "number") {
-			return "number"
-		} else {
-			return "no"
-		}
-	}
-
 	function validation() {
 		let isValid = true
 		inputElements.forEach((ie) => {
@@ -27,14 +18,18 @@ function createFormService(formParentElement, onSubmit) {
 			isNumber(inputValue)
 			const errorElement = ie.nextElementSibling
 
-			if (
+			if (inputValue === "") {
+				isValid = false
+				errorElement.textContent = "Input must can't be empty"
+				errorElement.style.color = "red"
+			} else if (
 				(inputType === "firstName" || inputType === "lastName") &&
 				inputValue.length < 2
 			) {
 				isValid = false
 				errorElement.textContent = "Input must be at least 2 characters long"
 				errorElement.style.color = "red"
-			} else if (inputType === "number" && !isNumber(inputValue) === "number") {
+			} else if (inputType === "number" && isNaN(inputValue)) {
 				isValid = false
 				errorElement.textContent = "Input must be a number"
 				errorElement.style.color = "red"
@@ -58,7 +53,7 @@ function createFormService(formParentElement, onSubmit) {
 	}
 
 	function onSubmitForm(event) {
-		if (event !== null) {
+		if (event) {
 			event.preventDefault()
 			if (validation) {
 				onSubmit()
@@ -78,7 +73,12 @@ function createFormService(formParentElement, onSubmit) {
 
 const form = createFormService("form", () => {
 	// This function will be called when the form is submitted and all input validations pass
-	console.log("Form submitted")
+	if (form.isValid()) {
+		const f = document.getElementById("my-form")
+		const child = document.createElement("h1")
+		f.appendChild(child)
+		child.setHTML("Form submitted")
+	}
 })
 const button = document.getElementById("submit-button")
 

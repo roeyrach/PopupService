@@ -6,27 +6,41 @@ function createPopup(popupBody, options) {
 		"style",
 		" display: flex;justify-content: center;align-items: center;"
 	)
-	popup.setAttribute("style", "border: 5px solid; width: max-content; height:")
+	popup.setAttribute(
+		"style",
+		"border: 5px solid; width: max-content; height:max-content"
+	)
 	popup.setHTML(popupBody)
 	popup.className = options.popupClassName || "popup"
 
 	// add event listener to close the popup when clicking outside
 	if (options.isCloseByClickOutside) {
 		document.addEventListener("click", function (event) {
-			if (!popup.contains(event.target)) {
+			if (
+				!popup.contains(event.target) &&
+				!document.getElementById("my-form").contains(event.target)
+			) {
 				close()
 			}
 		})
 	}
 
+	let bool = true
+
 	// define the open method
 	function open() {
-		document.body.appendChild(popup)
+		if (bool) {
+			document.body.appendChild(popup)
+			bool = false
+		}
 	}
 
 	// define the close method
 	function close() {
-		document.body.removeChild(popup)
+		if (!bool) {
+			document.body.removeChild(popup)
+			bool = true
+		}
 	}
 
 	// return the public methods
